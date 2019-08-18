@@ -1,6 +1,5 @@
 from flask import Flask,flash,redirect,url_for,session,logging,request
 from flask import render_template
-from data import Articles
 import psycopg2
 from wtforms import Form,StringField , TextAreaField,PasswordField,validators,SubmitField
 from passlib.hash import sha256_crypt
