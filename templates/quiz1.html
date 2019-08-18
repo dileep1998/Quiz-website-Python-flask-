@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block body %} 
+
+
+{% from 'formhelpers.html' import render_field  %}
+
+
+<h1>QUIZ</h1>
+<form action='/quiz_answers' method='POST'>
+<div class="jumbotron">
+    <ol >
+        {% for i in o %}
+            <li> <u>{{i}}</u> </li>
+            {% for j in o[i] %}
+                <input type='radio' value='{{j}}' name='{{i}}' />{{j}}<br>
+            {% endfor %}
+        {% endfor %}
+    </ol>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</div>    
+</form>
+
+{% endblock %}
+
