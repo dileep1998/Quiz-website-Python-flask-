@@ -1,6 +1,5 @@
 from flask import Flask,flash,redirect,url_for,session,logging,request
 from flask import render_template
-
 from data import Articles
 import psycopg2
 from wtforms import Form,StringField , TextAreaField,PasswordField,validators,SubmitField
@@ -29,6 +28,10 @@ def is_logged_in(f):
 def index():
 	return render_template('home.html')
 
+@app.route('/onlinequiz')
+@is_logged_in
+def onlinequiz():
+	return render_template('onlinequiz.html')
 
 
 @app.route('/about')
@@ -40,11 +43,6 @@ def about():
 @is_logged_in
 def contact():
 	return render_template('contact.html')
-
-@app.route('/onlinequiz')
-@is_logged_in
-def onlinequiz():
-	return render_template('onlinequiz.html')
 
 
 class RegisterForm(Form):
@@ -84,15 +82,12 @@ def quiz():
         cur.execute("SELECT questions,options FROM " + x + "")
         record=cur.fetchall()
         d={}
-        
-
+       
         for row in record:
             q=row[0]
             o=row[1]
             d[row[0]]=row[1]
-        
-        
-
+     
         return render_template('quiz1.html', o=d)
 
 @app.route('/quiz1',methods=['GET','POST'])
@@ -100,21 +95,16 @@ def quiz():
 def quiz1():
         conn = psycopg2.connect(database = "exam", user = "postgres", password = "1234", host = "localhost", port = "5432")
         cur=conn.cursor()
-        
-        
         cur.execute("SELECT questions,options FROM " + y + "")
         record=cur.fetchall()
         e={}
-        
 
         for row in record:
             q=row[0]
             o=row[1]
             e[row[0]]=row[1]
         
-
         return render_template('quiz2.html', o=e)          
-
 
 
 @app.route('/quiz_answers', methods=['POST'])
@@ -177,14 +167,7 @@ def quiz_answers1():
         flash(speech)
     return render_template('onlinequiz.html')    
     	
-
-                   
-
-
-
-
-
-
+	
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -201,26 +184,24 @@ def login():
         record=cur.fetchone()
         result=record[1]
         
-        if result is not None:
-
-            
+        if result is not None:     
             password = record[2]
 
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
-                # Passed
+                
                 session['logged_in'] = True
                 session['email'] = email
 
                 flash('You are now logged in', 'success')
                 return render_template('home.html')
-                #return redirect(url_for('home.html'))
+                
             else:
                 error = 'Invalid login'
                 return render_template('login.html', error=error)
-            # Close connection
+            
             cur.close()         	   	
-            # Get stored hash
+            
 
         else:
 
