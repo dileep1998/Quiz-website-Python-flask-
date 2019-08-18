@@ -5,7 +5,6 @@ Tools required for this project:
 2. Postgres (database)
 3. psycopg2
 4. Sublime text or Text editor
-
-Environment :
-1. Ubuntu (18.04)
-2. Python
+5. Ubuntu (18.04)
+6. Python
+7. HTML
